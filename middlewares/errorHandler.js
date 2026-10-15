@@ -1,15 +1,26 @@
-// Penanganan error terpusat, termasuk 404 untuk rute yang tidak ada
-const notFound = (req, res, next) => {
-  res.status(404).json({ pesan: `Rute ${req.method} ${req.originalUrl} tidak ditemukan` });
-};
+function errorHttp(status, message) {
+  const err = new Error(message);
+  err.status = status;
+  return err;
+}
 
-const errorHandler = (err, req, res, next) => {
-  // JSON rusak dari express.json()
-  if (err.type === "entity.parse.failed") {
-    return res.status(400).json({ pesan: "Format JSON tidak valid" });
+function notFoundHandler(req, res) {
+  res.status(404).json({ message: `Rute ${req.method} ${req.originalUrl} tidak ditemukan` });
+}
+
+function errorHandler(err, req, res, next) {
+  if (err.type === 'entity.parse.failed') {
+    return res.status(400).json({ message: 'Format JSON tidak valid' });
   }
-  console.error(err);
-  res.status(err.status || 500).json({ pesan: err.message || "Terjadi kesalahan pada server" });
-};
 
-module.exports = { notFound, errorHandler };
+  const status = err.status || 500;
+
+  if (status === 500) {
+    console.error(err.stack);
+    return res.status(500).json({ message: 'Terjadi kesalahan pada server' });
+  }
+
+  res.status(status).json({ message: err.message });
+}
+
+module.exports = { errorHttp, notFoundHandler, errorHandler };

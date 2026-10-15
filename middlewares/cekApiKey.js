@@ -1,10 +1,12 @@
-// Melindungi rute POST, PUT, DELETE dengan header x-api-key
-const cekApiKey = (req, res, next) => {
-  const apiKey = req.header("x-api-key");
+const { errorHttp } = require('./errorHandler');
+
+function cekApiKey(req, res, next) {
+  const apiKey = req.headers['x-api-key'];
+
   if (!apiKey || apiKey !== process.env.API_KEY) {
-    return res.status(401).json({ pesan: "API key tidak ada atau salah" });
+    return next(errorHttp(401, 'API key tidak valid'));
   }
   next();
-};
+}
 
 module.exports = cekApiKey;
