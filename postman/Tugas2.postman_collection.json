@@ -1,0 +1,391 @@
+{
+  "info": {
+    "_postman_id": "fb698740-2468-4b06-bc5a-49d93c533cbd",
+    "name": "Tugas2",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "58423294",
+    "_collection_link": "https://go.postman.co/collection/58423294-fb698740-2468-4b06-bc5a-49d93c533cbd?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "A. CRUD",
+      "item": [
+        {
+          "name": "Semua Streaming",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code adalah 200', function () {\r\n  pm.response.to.have.status(200);\r\n});\r\n\r\npm.test('Response berupa array', function () {\r\n  const jsonData = pm.response.json();\r\n  pm.expect(jsonData).to.be.an('array');\r\n});\r\n\r\npm.test('Setiap data memiliki id dan judul', function () {\r\n  const jsonData = pm.response.json();\r\n  jsonData.forEach((item) => {\r\n    pm.expect(item).to.have.property('id');\r\n    pm.expect(item).to.have.property('judul');\r\n  });\r\n});\r\n\r\npm.test('Response time di bawah 500ms', function () {\r\n  pm.expect(pm.response.responseTime).to.be.below(500);\r\n});\r\n\r\npm.test('Data streaming pertama berjudul Rahasia Kampus Tua', function () {\r\n  const jsonData = pm.response.json();\r\n  pm.expect(jsonData[0].judul).to.eql('Rahasia Kampus Tua');\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/tv-series",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "tv-series"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Tambah Streaming",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code adalah 201', function () {\r\n  pm.response.to.have.status(201);\r\n});\r\n\r\npm.test('Data baru memiliki id dan judul sesuai kiriman', function () {\r\n  const jsonData = pm.response.json();\r\n  pm.expect(jsonData).to.have.property('id');\r\n  pm.expect(jsonData.judul).to.eql('Tunggu Aku Sukses Nanti');\r\n});\r\n\r\nif (pm.response.code === 201) {\r\n  pm.environment.set('streamingId', pm.response.json().id);\r\n}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "{{api-key}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"judul\": \"Tunggu Aku Sukses Nanti\",\r\n    \"jumlahEpisode\": 1,\r\n    \"status\": \"Tamat\",\r\n    \"studio\": \"Falcon Pictures\",\r\n    \"tahunRilis\": 2026\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/tv-series",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "tv-series"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Satu Streaming",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code adalah 200', function () {\r\n  pm.response.to.have.status(200);\r\n});\r\n\r\npm.test('Data yang diambil adalah Tunggu Aku Sukses Nanti', function () {\r\n  const jsonData = pm.response.json();\r\n  pm.expect(jsonData.id).to.eql(Number(pm.environment.get('streamingId')));\r\n  pm.expect(jsonData.judul).to.eql('Tunggu Aku Sukses Nanti');\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/tv-series/{{streamingId}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "tv-series",
+                "{{streamingId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Ubah Streaming",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code adalah 200', function () {\r\n  pm.response.to.have.status(200);\r\n});\r\n\r\npm.test('Status berubah, judul tetap', function () {\r\n  const jsonData = pm.response.json();\r\n  pm.expect(jsonData.status).to.eql('Tayang');\r\n  pm.expect(jsonData.judul).to.eql('Tunggu Aku Sukses Nanti');\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "{{api-key}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{ \"status\": \"Tayang\" }",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/tv-series/{{streamingId}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "tv-series",
+                "{{streamingId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Hapus Streaming",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code adalah 204', function () {\r\n  pm.response.to.have.status(204);\r\n});\r\n\r\npm.test('Response tidak memiliki isi', function () {\r\n  pm.expect(pm.response.text()).to.eql('');\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "{{api-key}}"
+              },
+              {
+                "key": "",
+                "value": "",
+                "disabled": true
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/tv-series/{{streamingId}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "tv-series",
+                "{{streamingId}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "B. Skenario gagal",
+      "item": [
+        {
+          "name": "ID Sudah Dihapus (404)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code adalah 404', function () {\r\n  pm.response.to.have.status(404);\r\n});\r\n\r\npm.test('Pesan error: Data tidak ditemukan', function () {\r\n  pm.expect(pm.response.json().message).to.eql('Data tidak ditemukan');\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "{{api-key}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"judul\": \"Tunggu Aku Sukses Nanti\",\r\n    \"jumlahEpisode\": 1,\r\n    \"status\": \"Tamat\",\r\n    \"studio\": \"Falcon Pictures\",\r\n    \"tahunRilis\": 2026\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/tv-series/{{streamingId}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "tv-series",
+                "{{streamingId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Tanpa API Key (401)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code adalah 401\", function () {\n    pm.response.to.have.status(401);\n});\n\npm.test(\"Pesan error: API key tidak valid\", function () {\n    var jsonData = pm.response.json();\n    pm.expect(jsonData.message).to.eql(\"API key tidak valid\");\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"judul\": \"Tanpa Key\",\r\n  \"jumlahEpisode\": 10,\r\n  \"status\": \"Tayang\",\r\n  \"studio\": \"Falcon Pictures\",\r\n  \"tahunRilis\": 2026\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/tv-series",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "tv-series"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Data Tidak Lengkap (400)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code adalah 400', function () {\r\n  pm.response.to.have.status(400);\r\n});\r\n\r\npm.test('Pesan error menyebut field wajib', function () {\r\n  pm.expect(pm.response.json().message).to.include('wajib diisi');\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "{{api-key}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{ \"judul\": \"Hanya Judul\" }",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/tv-series",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "tv-series"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "JSON Rusak (400)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code adalah 400', function () {\r\n  pm.response.to.have.status(400);\r\n});\r\n\r\npm.test('Respons tetap berupa JSON, bukan HTML', function () {\r\n  pm.response.to.be.json;\r\n  pm.expect(pm.response.json().message).to.eql('Format JSON tidak valid');\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "{{api-key}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"judul\": \"Rusak\",}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/tv-series",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "tv-series"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

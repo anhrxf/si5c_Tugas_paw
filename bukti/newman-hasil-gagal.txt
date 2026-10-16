@@ -1,0 +1,132 @@
+﻿newman
+
+Tugas2
+
+□ A. CRUD
+└ Semua Streaming
+  GET http://localhost:3000/tv-series [200 OK, 650B, 58ms]
+  √  Status code adalah 200
+  √  Response berupa array
+  √  Setiap data memiliki id dan judul
+  √  Response time di bawah 500ms
+  √  Data streaming pertama berjudul Rahasia Kampus Tua
+
+└ Tambah Streaming
+  POST http://localhost:3000/tv-series [401 Unauthorized, 344B, 55ms]
+  1. Status code adalah 201
+  2. Data baru memiliki id dan judul sesuai kiriman
+
+└ Satu Streaming
+  GET http://localhost:3000/tv-series/ [200 OK, 650B, 5ms]
+  √  Status code adalah 200
+  3. Data yang diambil adalah Tunggu Aku Sukses Nanti
+
+└ Ubah Streaming
+  PUT http://localhost:3000/tv-series/ [404 Not Found, 358B, 95ms]
+  4. Status code adalah 200
+  5. Status berubah, judul tetap
+
+└ Hapus Streaming
+  DELETE http://localhost:3000/tv-series/ [404 Not Found, 361B, 8ms]
+  6. Status code adalah 204
+  7. Response tidak memiliki isi
+
+□ B. Skenario gagal
+└ ID Sudah Dihapus (404)
+  GET http://localhost:3000/tv-series/ [200 OK, 650B, 11ms]
+  8. Status code adalah 404
+  9. Pesan error: Data tidak ditemukan
+
+└ Tanpa API Key (401)
+  POST http://localhost:3000/tv-series [401 Unauthorized, 344B, 5ms]
+  √  Status code adalah 401
+  √  Pesan error: API key tidak valid
+
+└ Data Tidak Lengkap (400)
+  POST http://localhost:3000/tv-series [401 Unauthorized, 344B, 10ms]
+ 10. Status code adalah 400
+ 11. Pesan error menyebut field wajib
+
+└ JSON Rusak (400)
+  POST http://localhost:3000/tv-series [400 Bad Request, 347B, 10ms]
+  √  Status code adalah 400
+  √  Respons tetap berupa JSON, bukan HTML
+
+┌─────────────────────────┬──────────────────┬──────────────────┐
+│                         │         executed │           failed │
+├─────────────────────────┼──────────────────┼──────────────────┤
+│              iterations │                1 │                0 │
+├─────────────────────────┼──────────────────┼──────────────────┤
+│                requests │                9 │                0 │
+├─────────────────────────┼──────────────────┼──────────────────┤
+│            test-scripts │                9 │                0 │
+├─────────────────────────┼──────────────────┼──────────────────┤
+│      prerequest-scripts │                0 │                0 │
+├─────────────────────────┼──────────────────┼──────────────────┤
+│              assertions │               21 │               11 │
+├─────────────────────────┴──────────────────┴──────────────────┤
+│ total run duration: 1050ms                                    │
+├───────────────────────────────────────────────────────────────┤
+│ total data received: 1.28kB (approx)                          │
+├───────────────────────────────────────────────────────────────┤
+│ average response time: 28ms [min: 5ms, max: 95ms, s.d.: 30ms] │
+└───────────────────────────────────────────────────────────────┘
+
+   #  failure         detail                                                               
+                                                                                           
+ 01.  AssertionError  Status code adalah 201                                               
+                      expected response to have status code 201 but got 401                
+                      at assertion:0 in test-script                                        
+                      inside "A. CRUD / Tambah Streaming"                                  
+                                                                                           
+ 02.  AssertionError  Data baru memiliki id dan judul sesuai kiriman                       
+                      expected { message: 'API key tidak valid' } to have property 'id'    
+                      at assertion:1 in test-script                                        
+                      inside "A. CRUD / Tambah Streaming"                                  
+                                                                                           
+ 03.  AssertionError  Data yang diambil adalah Tunggu Aku Sukses Nanti                     
+                      expected undefined to deeply equal +0                                
+                      at assertion:1 in test-script                                        
+                      inside "A. CRUD / Satu Streaming"                                    
+                                                                                           
+ 04.  AssertionError  Status code adalah 200                                               
+                      expected response to have status code 200 but got 404                
+                      at assertion:0 in test-script                                        
+                      inside "A. CRUD / Ubah Streaming"                                    
+                                                                                           
+ 05.  AssertionError  Status berubah, judul tetap                                          
+                      expected undefined to deeply equal 'Tayang'                          
+                      at assertion:1 in test-script                                        
+                      inside "A. CRUD / Ubah Streaming"                                    
+                                                                                           
+ 06.  AssertionError  Status code adalah 204                                               
+                      expected response to have status code 204 but got 404                
+                      at assertion:0 in test-script                                        
+                      inside "A. CRUD / Hapus Streaming"                                   
+                                                                                           
+ 07.  AssertionError  Response tidak memiliki isi                                          
+                      expected '{"message":"Rute DELETE /tv-series/ t…' to deeply equal '' 
+                      at assertion:1 in test-script                                        
+                      inside "A. CRUD / Hapus Streaming"                                   
+                                                                                           
+ 08.  AssertionError  Status code adalah 404                                               
+                      expected response to have status code 404 but got 200                
+                      at assertion:0 in test-script                                        
+                      inside "B. Skenario gagal / ID Sudah Dihapus (404)"                  
+                                                                                           
+ 09.  AssertionError  Pesan error: Data tidak ditemukan                                    
+                      expected undefined to deeply equal 'Data tidak ditemukan'            
+                      at assertion:1 in test-script                                        
+                      inside "B. Skenario gagal / ID Sudah Dihapus (404)"                  
+                                                                                           
+ 10.  AssertionError  Status code adalah 400                                               
+                      expected response to have status code 400 but got 401                
+                      at assertion:0 in test-script                                        
+                      inside "B. Skenario gagal / Data Tidak Lengkap (400)"                
+                                                                                           
+ 11.  AssertionError  Pesan error menyebut field wajib                                     
+                      expected 'API key tidak valid' to include 'wajib diisi'              
+                      at assertion:1 in test-script                                        
+                      inside "B. Skenario gagal / Data Tidak Lengkap (400)"                
+
+

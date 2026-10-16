@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="Tugas2" tests="9" time="0.137">
+  <testsuite name="A. CRUD / Semua Streaming" id="d322000f-879c-4235-90d8-b3c620c57767" timestamp="2026-10-16T12:46:00.510Z" tests="5" failures="0" errors="0" time="0.094">
+    <testcase name="Status code adalah 200" time="0.094" classname="ACrudSemuaStreaming"/>
+    <testcase name="Response berupa array" time="0.094" classname="ACrudSemuaStreaming"/>
+    <testcase name="Setiap data memiliki id dan judul" time="0.094" classname="ACrudSemuaStreaming"/>
+    <testcase name="Response time di bawah 500ms" time="0.094" classname="ACrudSemuaStreaming"/>
+    <testcase name="Data streaming pertama berjudul Rahasia Kampus Tua" time="0.094" classname="ACrudSemuaStreaming"/>
+  </testsuite>
+  <testsuite name="A. CRUD / Tambah Streaming" id="83ff811e-80f3-43e2-a5f7-07cd1a620e89" timestamp="2026-10-16T12:46:00.510Z" tests="2" failures="0" errors="0" time="0.009">
+    <testcase name="Status code adalah 201" time="0.009" classname="ACrudTambahStreaming"/>
+    <testcase name="Data baru memiliki id dan judul sesuai kiriman" time="0.009" classname="ACrudTambahStreaming"/>
+  </testsuite>
+  <testsuite name="A. CRUD / Satu Streaming" id="c70ab545-e033-40ea-890c-e6afba5e995e" timestamp="2026-10-16T12:46:00.510Z" tests="2" failures="0" errors="0" time="0.007">
+    <testcase name="Status code adalah 200" time="0.007" classname="ACrudSatuStreaming"/>
+    <testcase name="Data yang diambil adalah Tunggu Aku Sukses Nanti" time="0.007" classname="ACrudSatuStreaming"/>
+  </testsuite>
+  <testsuite name="A. CRUD / Ubah Streaming" id="b3840ffa-95c0-49c3-83c5-2cdedec35afb" timestamp="2026-10-16T12:46:00.510Z" tests="2" failures="0" errors="0" time="0.004">
+    <testcase name="Status code adalah 200" time="0.004" classname="ACrudUbahStreaming"/>
+    <testcase name="Status berubah, judul tetap" time="0.004" classname="ACrudUbahStreaming"/>
+  </testsuite>
+  <testsuite name="A. CRUD / Hapus Streaming" id="18c37cbe-5a51-4131-be2e-b0be9f56c156" timestamp="2026-10-16T12:46:00.510Z" tests="2" failures="0" errors="0" time="0.004">
+    <testcase name="Status code adalah 204" time="0.004" classname="ACrudHapusStreaming"/>
+    <testcase name="Response tidak memiliki isi" time="0.004" classname="ACrudHapusStreaming"/>
+  </testsuite>
+  <testsuite name="B. Skenario gagal / ID Sudah Dihapus (404)" id="6a2024a7-281f-4312-9cb9-cc9ad809570d" timestamp="2026-10-16T12:46:00.510Z" tests="2" failures="0" errors="0" time="0.004">
+    <testcase name="Status code adalah 404" time="0.004" classname="BSkenarioGagalIdSudahDihapus404"/>
+    <testcase name="Pesan error: Data tidak ditemukan" time="0.004" classname="BSkenarioGagalIdSudahDihapus404"/>
+  </testsuite>
+  <testsuite name="B. Skenario gagal / Tanpa API Key (401)" id="33829bde-50d9-42f2-ad0c-485fb0ffedf3" timestamp="2026-10-16T12:46:00.510Z" tests="2" failures="0" errors="0" time="0.004">
+    <testcase name="Status code adalah 401" time="0.004" classname="BSkenarioGagalTanpaApiKey401"/>
+    <testcase name="Pesan error: API key tidak valid" time="0.004" classname="BSkenarioGagalTanpaApiKey401"/>
+  </testsuite>
+  <testsuite name="B. Skenario gagal / Data Tidak Lengkap (400)" id="bee20740-b280-4e81-834d-f66e4ab6aaf0" timestamp="2026-10-16T12:46:00.510Z" tests="2" failures="0" errors="0" time="0.005">
+    <testcase name="Status code adalah 400" time="0.005" classname="BSkenarioGagalDataTidakLengkap400"/>
+    <testcase name="Pesan error menyebut field wajib" time="0.005" classname="BSkenarioGagalDataTidakLengkap400"/>
+  </testsuite>
+  <testsuite name="B. Skenario gagal / JSON Rusak (400)" id="035e4c06-5d53-4112-9090-f6a339f68983" timestamp="2026-10-16T12:46:00.510Z" tests="2" failures="0" errors="0" time="0.006">
+    <testcase name="Status code adalah 400" time="0.006" classname="BSkenarioGagalJsonRusak400"/>
+    <testcase name="Respons tetap berupa JSON, bukan HTML" time="0.006" classname="BSkenarioGagalJsonRusak400"/>
+  </testsuite>
+</testsuites>
