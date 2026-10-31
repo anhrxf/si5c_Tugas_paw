@@ -1,42 +1,49 @@
-let streaming = [
-  { id: 1, judul: 'Rahasia Kampus Tua', jumlahEpisode: 12, status: 'Tamat', studio: 'Layar Kita', tahunRilis: 2025 },
-  { id: 2, judul: 'Detektif Malam', jumlahEpisode: 8, status: 'Tayang', studio: 'Cahaya Visual', tahunRilis: 2026 },
-  { id: 3, judul: 'Jejak Kota Lama', jumlahEpisode: 20, status: 'Tamat', studio: 'Nusantara Pictures', tahunRilis: 2023 }
-];
-let nextId = 4;
+const mongoose = require('mongoose');
 
-function getAll(status) {
-  if (!status) return streaming;
-  return streaming.filter((s) => s.status.toLowerCase() === status.toLowerCase());
-}
+// Subdocument Schema untuk Studio
+const studioSchema = new mongoose.Schema({
+  nama: { 
+    type: String, 
+    required: [true, 'nama studio wajib diisi'], 
+    trim: true 
+  },
+  negara: { 
+    type: String, 
+    trim: true 
+  },
+}, { _id: false }); // _id: false agar subdocument tidak dibuatkan _id terpisah
 
-function getById(id) {
-  return streaming.find((s) => s.id === id) || null;
-}
+// Schema Utama Streaming
+const streamingSchema = new mongoose.Schema({
+  judul: { 
+    type: String, 
+    required: [true, 'judul wajib diisi'], 
+    trim: true 
+  },
+  jumlahEpisode: { 
+    type: Number, 
+    required: [true, 'jumlahEpisode wajib diisi'],
+    min: [1, 'jumlahEpisode minimal 1']
+  },
+  status: { 
+    type: String, 
+    required: [true, 'status wajib diisi'], 
+    enum: {
+      values: ['Tayang', 'Tamat'],
+      message: '{VALUE} bukan status yang valid (hanya Tayang atau Tamat)'
+    },
+    trim: true 
+  },
+  studio: studioSchema, // Menggunakan subdocument studioSchema
+  studioId: { type: mongoose.Schema.Types.ObjectId, ref: 'Studio' },
+  tahunRilis: {
+    type: Number, 
+    required: [true, 'tahunRilis wajib diisi'] 
+  },
+  createdAt: { 
+    type: Date, 
+    default: Date.now 
+  },
+});
 
-function create(data) {
-  const baru = { id: nextId++, ...data };
-  streaming.push(baru);
-  return baru;
-}
-
-function update(id, data) {
-  const index = streaming.findIndex((s) => s.id === id);
-  if (index === -1) return null;
-
-  const bersih = Object.fromEntries(
-    Object.entries(data).filter(([, v]) => v !== undefined)
-  );
-
-  streaming[index] = { ...streaming[index], ...bersih, id };
-  return streaming[index];
-}
-
-function remove(id) {
-  const index = streaming.findIndex((s) => s.id === id);
-  if (index === -1) return false;
-  streaming.splice(index, 1);
-  return true;
-}
-
-module.exports = { getAll, getById, create, update, remove };
+module.exports = mongoose.model('Streaming', streamingSchema);

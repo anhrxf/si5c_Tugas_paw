@@ -1,12 +1,15 @@
 const express = require('express');
 const router = express.Router();
-const streamingController = require('../controllers/streamingController');
+const c = require('../controllers/streamingController');
 const cekApiKey = require('../middlewares/cekApiKey');
 
-router.get('/', streamingController.getAll);
-router.get('/:id', streamingController.getById);
-router.post('/', cekApiKey, streamingController.create);
-router.put('/:id', cekApiKey, streamingController.update);
-router.delete('/:id', cekApiKey, streamingController.remove);
+// Route publik (hanya membaca data)
+router.get('/', c.getAll);
+router.get('/:id', c.getById);
+
+// Route terlindungi (membutuhkan x-api-key)
+router.post('/', cekApiKey, c.create);
+router.put('/:id', cekApiKey, c.update);
+router.delete('/:id', cekApiKey, c.remove);
 
 module.exports = router;

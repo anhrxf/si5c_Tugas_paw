@@ -1,4 +1,5 @@
 require('dotenv').config();
+const mongoose = require('mongoose');   // tambahkan di antara require lainnya
 
 const express = require('express');
 const cors = require('cors');
@@ -7,6 +8,7 @@ const logger = require('./middlewares/logger');
 const { notFoundHandler, errorHandler } = require('./middlewares/errorHandler');
 
 const streamingRoutes = require('./routes/streamingRoutes');
+const studioRoutes = require('./routes/studioRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -26,6 +28,7 @@ app.get('/', (req, res) => {
 
 // ---------- Route per modul ----------
 app.use('/tv-series', streamingRoutes);
+app.use('/studios', studioRoutes);
 
 // Route untuk mensimulasikan error tak terduga (hapus sebelum dipublikasikan)
 app.get('/error-uji', () => {
@@ -36,6 +39,12 @@ app.get('/error-uji', () => {
 app.use(notFoundHandler);
 app.use(errorHandler);
 
-app.listen(PORT, () => {
-  console.log(`Server berjalan di http://localhost:${PORT}`);
-});
+mongoose.connect(process.env.MONGODB_URI)
+  .then(() => {
+    console.log('Terhubung ke MongoDB');
+    app.listen(PORT, () => console.log(`Server berjalan di http://localhost:${PORT}`));
+  })
+  .catch((err) => {
+    console.error('Gagal terhubung:', err.message);
+    process.exit(1);
+  });
